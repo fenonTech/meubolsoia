@@ -57,6 +57,18 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // MeuBolso Custom Colors
+        "deep-black": "hsl(var(--deep-black))",
+        "soft-black": "hsl(var(--soft-black))",
+        "luxury-gray": "hsl(var(--luxury-gray))",
+        "classic-gold": "hsl(var(--classic-gold))",
+        "bright-gold": "hsl(var(--bright-gold))",
+        "champagne": "hsl(var(--champagne))",
+        "elegant-bronze": "hsl(var(--elegant-bronze))",
+      },
+      fontFamily: {
+        inter: ["Inter", "system-ui", "sans-serif"],
+        playfair: ["Playfair Display", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
