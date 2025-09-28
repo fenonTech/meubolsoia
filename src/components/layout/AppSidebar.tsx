@@ -57,12 +57,15 @@ export function AppSidebar() {
         {/* Logo */}
         <div className="mb-8 text-center">
           {!isCollapsed ? (
-            <h1 className="text-2xl font-playfair font-bold text-gradient-gold">
-              MeuBolso
-            </h1>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-2xl">💰</span>
+              <h1 className="text-2xl font-playfair font-bold text-gradient-gold">
+                MeuBolso
+              </h1>
+            </div>
           ) : (
             <div className="w-8 h-8 mx-auto bg-gradient-to-r from-classic-gold to-bright-gold rounded-lg flex items-center justify-center">
-              <span className="text-deep-black font-bold text-lg">M</span>
+              <span className="text-deep-black font-bold text-lg">💰</span>
             </div>
           )}
         </div>
