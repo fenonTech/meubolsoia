@@ -1,86 +1,119 @@
-import { Bell, CheckCircle, AlertTriangle, Info, X } from "lucide-react";
+import { Bell, CheckCircle, AlertTriangle, Info, X, TrendingUp, TrendingDown, DollarSign, Target, Calendar } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 const Notificacoes = () => {
+  const [filter, setFilter] = useState<"todas" | "naoLidas">("naoLidas");
+  
   // Mock data para notificações
   const notificacoes = [
     {
       id: 1,
       tipo: "transacao",
-      titulo: "Nova transação detectada",
-      descricao: "Débito de R$ 150,00 no cartão ****1234",
-      tempo: "Há 2 minutos",
+      titulo: "Despesa cadastrada",
+      descricao: "Supermercado Extra - R$ 245,80",
+      tempo: "Há 5 minutos",
       lida: false,
-      icone: AlertTriangle,
-      cor: "text-yellow-400"
+      icone: TrendingDown,
+      cor: "text-red-400"
     },
     {
       id: 2,
       tipo: "meta",
       titulo: "Meta atingida! 🎉",
-      descricao: "Você atingiu 100% da meta 'Viagem para Europa'",
+      descricao: "Você atingiu 100% da meta 'Reserva de Emergência'",
       tempo: "Há 1 hora",
       lida: false,
-      icone: CheckCircle,
+      icone: Target,
       cor: "text-green-400"
     },
     {
       id: 3,
       tipo: "investimento",
       titulo: "Dividendos recebidos",
-      descricao: "R$ 75,50 em dividendos foram creditados",
-      tempo: "Há 3 horas",
-      lida: true,
-      icone: Info,
-      cor: "text-classic-gold"
+      descricao: "R$ 125,50 em dividendos creditados na sua conta",
+      tempo: "Há 2 horas",
+      lida: false,
+      icone: TrendingUp,
+      cor: "text-green-400"
     },
     {
       id: 4,
-      tipo: "meta",
-      titulo: "Lembrete de Meta",
-      descricao: "Faltam R$ 500,00 para atingir sua meta de reserva de emergência",
-      tempo: "Há 1 dia",
-      lida: true,
-      icone: Bell,
-      cor: "text-blue-400"
+      tipo: "transacao",
+      titulo: "Receita registrada",
+      descricao: "Salário - R$ 5.800,00",
+      tempo: "Há 3 horas",
+      lida: false,
+      icone: DollarSign,
+      cor: "text-green-400"
     },
     {
       id: 5,
+      tipo: "meta",
+      titulo: "Lembrete de Meta",
+      descricao: "Faltam R$ 500,00 para atingir sua meta 'Viagem Europa'",
+      tempo: "Há 5 horas",
+      lida: true,
+      icone: Target,
+      cor: "text-yellow-400"
+    },
+    {
+      id: 6,
+      tipo: "sistema",
+      titulo: "Fatura do cartão disponível",
+      descricao: "Fatura do Nubank com vencimento em 15/10 - R$ 1.234,56",
+      tempo: "Há 1 dia",
+      lida: true,
+      icone: Calendar,
+      cor: "text-blue-400"
+    },
+    {
+      id: 7,
       tipo: "transacao",
-      titulo: "Receita registrada",
-      descricao: "Freelance de R$ 800,00 foi adicionado às suas receitas",
+      titulo: "Despesa recorrente",
+      descricao: "Netflix - R$ 39,90 debitado automaticamente",
+      tempo: "Há 1 dia",
+      lida: true,
+      icone: TrendingDown,
+      cor: "text-red-400"
+    },
+    {
+      id: 8,
+      tipo: "investimento",
+      titulo: "Valorização de carteira",
+      descricao: "Sua carteira valorizou 2.3% neste mês",
       tempo: "Há 2 dias",
+      lida: true,
+      icone: TrendingUp,
+      cor: "text-green-400"
+    },
+    {
+      id: 9,
+      tipo: "sistema",
+      titulo: "Sincronização concluída",
+      descricao: "Suas contas foram sincronizadas com sucesso",
+      tempo: "Há 3 dias",
       lida: true,
       icone: CheckCircle,
       cor: "text-green-400"
     },
     {
-      id: 6,
-      tipo: "sistema",
-      titulo: "Sincronização concluída",
-      descricao: "Suas contas bancárias foram sincronizadas com sucesso",
-      tempo: "Há 3 dias",
+      id: 10,
+      tipo: "meta",
+      titulo: "Nova meta criada",
+      descricao: "Meta 'Carro Novo' foi criada com sucesso",
+      tempo: "Há 4 dias",
       lida: true,
-      icone: Info,
-      cor: "text-classic-gold"
+      icone: Target,
+      cor: "text-blue-400"
     }
   ];
 
   const notificacaoesNaoLidas = notificacoes.filter(n => !n.lida);
-  const notificacoesLidas = notificacoes.filter(n => n.lida);
-
-  const getTipoColor = (tipo: string) => {
-    switch (tipo) {
-      case "transacao": return "bg-yellow-400/20 text-yellow-400";
-      case "meta": return "bg-green-400/20 text-green-400";
-      case "investimento": return "bg-classic-gold/20 text-classic-gold";
-      case "sistema": return "bg-blue-400/20 text-blue-400";
-      default: return "bg-muted/20 text-muted-foreground";
-    }
-  };
+  const notificacoesFiltradas = filter === "naoLidas" ? notificacaoesNaoLidas : notificacoes;
 
   const getTipoLabel = (tipo: string) => {
     switch (tipo) {
@@ -95,225 +128,176 @@ const Notificacoes = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6 fade-in">
-        <div className="flex justify-between items-center">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold font-playfair text-gradient-gold mb-2">
+            <h1 className="text-3xl font-bold text-foreground mb-2">
               Notificações
             </h1>
             <p className="text-muted-foreground">
-              Acompanhe todas as atualizações do seu MeuBolso
+              {notificacaoesNaoLidas.length} não lida(s) · {notificacoes.length} total
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="btn-outline-gold">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {/* Marcar todas como lidas */}}
+            >
+              <CheckCircle className="mr-2 h-4 w-4" />
               Marcar todas como lidas
-            </Button>
-            <Button className="btn-gold">
-              <Bell className="mr-2 h-4 w-4" />
-              Configurar
             </Button>
           </div>
         </div>
 
-        {/* Estatísticas */}
-        <div className="grid gap-4 md:grid-cols-4">
-          <Card className="card-metric">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-elegant-bronze">
-                Não Lidas
-              </CardTitle>
-              <Bell className="h-4 w-4 text-classic-gold" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-champagne font-playfair">
-                {notificacaoesNaoLidas.length}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {notificacoes.length} total
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-metric">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-elegant-bronze">
-                Transações
-              </CardTitle>
-              <AlertTriangle className="h-4 w-4 text-yellow-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-champagne font-playfair">
-                {notificacoes.filter(n => n.tipo === "transacao").length}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                alertas financeiros
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-metric">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-elegant-bronze">
-                Metas
-              </CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-champagne font-playfair">
-                {notificacoes.filter(n => n.tipo === "meta").length}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                atualizações de progresso
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-metric">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-elegant-bronze">
-                Investimentos
-              </CardTitle>
-              <Info className="h-4 w-4 text-classic-gold" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-champagne font-playfair">
-                {notificacoes.filter(n => n.tipo === "investimento").length}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                atualizações de portfólio
-              </p>
-            </CardContent>
-          </Card>
+        {/* Filtros */}
+        <div className="flex gap-2">
+          <Button
+            variant={filter === "naoLidas" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFilter("naoLidas")}
+          >
+            <Bell className="mr-2 h-4 w-4" />
+            Não lidas ({notificacaoesNaoLidas.length})
+          </Button>
+          <Button
+            variant={filter === "todas" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFilter("todas")}
+          >
+            Todas ({notificacoes.length})
+          </Button>
         </div>
 
-        {/* Notificações Não Lidas */}
-        {notificacaoesNaoLidas.length > 0 && (
-          <Card className="card-premium">
-            <CardHeader>
-              <CardTitle className="text-classic-gold font-playfair flex items-center gap-2">
-                <Bell className="h-5 w-5" />
-                Não Lidas ({notificacaoesNaoLidas.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {notificacaoesNaoLidas.map((notificacao) => {
-                const IconComponent = notificacao.icone;
-                return (
-                  <div key={notificacao.id} className="flex items-start gap-4 p-4 bg-deep-black/20 rounded-lg border-l-4 border-classic-gold hover:bg-luxury-gray/30 transition-colors">
-                    <div className={`p-2 rounded-full bg-deep-black/30 ${notificacao.cor}`}>
-                      <IconComponent className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h4 className="font-medium text-champagne">{notificacao.titulo}</h4>
-                          <Badge className={getTipoColor(notificacao.tipo)} variant="outline">
+        {/* Lista de Notificações */}
+        <div className="space-y-3">
+          {notificacoesFiltradas.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
+                  Nenhuma notificação
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Você está em dia com todas as suas notificações!
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            notificacoesFiltradas.map((notificacao) => {
+              const IconComponent = notificacao.icone;
+              return (
+                <Card 
+                  key={notificacao.id} 
+                  className={`transition-all hover:shadow-md ${
+                    !notificacao.lida ? 'border-l-4 border-l-primary bg-accent/5' : ''
+                  }`}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-4">
+                      {/* Ícone */}
+                      <div className={`p-2.5 rounded-full bg-background ${notificacao.cor}`}>
+                        <IconComponent className="h-5 w-5" />
+                      </div>
+                      
+                      {/* Conteúdo */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h4 className={`font-medium ${!notificacao.lida ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {notificacao.titulo}
+                          </h4>
+                          {!notificacao.lida && (
+                            <div className="h-2 w-2 rounded-full bg-primary flex-shrink-0 mt-1.5" />
+                          )}
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {notificacao.descricao}
+                        </p>
+                        
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <span>{notificacao.tempo}</span>
+                          <span>•</span>
+                          <Badge variant="outline" className="text-xs">
                             {getTipoLabel(notificacao.tipo)}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">{notificacao.tempo}</span>
-                          <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive">
-                            <X className="h-3 w-3" />
+                      </div>
+                      
+                      {/* Ações */}
+                      <div className="flex items-center gap-1">
+                        {!notificacao.lida && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            onClick={() => {/* Marcar como lida */}}
+                          >
+                            <CheckCircle className="h-4 w-4" />
                           </Button>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{notificacao.descricao}</p>
-                      <div className="flex gap-2 mt-3">
-                        <Button size="sm" className="btn-outline-gold">
-                          Marcar como lida
-                        </Button>
-                        <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-champagne">
-                          Ver detalhes
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Notificações Lidas */}
-        <Card className="card-premium">
-          <CardHeader>
-            <CardTitle className="text-classic-gold font-playfair">
-              Recentes ({notificacoesLidas.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {notificacoesLidas.map((notificacao) => {
-              const IconComponent = notificacao.icone;
-              return (
-                <div key={notificacao.id} className="flex items-start gap-4 p-4 bg-deep-black/10 rounded-lg opacity-75 hover:opacity-100 transition-opacity">
-                  <div className={`p-2 rounded-full bg-deep-black/30 ${notificacao.cor}`}>
-                    <IconComponent className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-medium text-champagne">{notificacao.titulo}</h4>
-                        <Badge className={getTipoColor(notificacao.tipo)} variant="outline">
-                          {getTipoLabel(notificacao.tipo)}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">{notificacao.tempo}</span>
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive">
-                          <X className="h-3 w-3" />
+                        )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                          onClick={() => {/* Remover */}}
+                        >
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{notificacao.descricao}</p>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               );
-            })}
-          </CardContent>
-        </Card>
+            })
+          )}
+        </div>
 
-        {/* Configurações de Notificação */}
-        <Card className="card-premium">
+        {/* Estatísticas por Tipo */}
+        <Card>
           <CardHeader>
-            <CardTitle className="text-classic-gold font-playfair">Configurações Rápidas</CardTitle>
+            <CardTitle className="text-lg">Resumo por categoria</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <div className="p-4 bg-deep-black/20 rounded-lg text-center">
-                <AlertTriangle className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-                <h4 className="font-medium text-champagne mb-1">Transações</h4>
-                <p className="text-xs text-muted-foreground mb-3">Alertas em tempo real</p>
-                <Button size="sm" className="btn-outline-gold w-full">
-                  Configurar
-                </Button>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/50">
+                <TrendingDown className="h-8 w-8 text-red-400" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Transações</p>
+                  <p className="text-lg font-semibold">
+                    {notificacoes.filter(n => n.tipo === "transacao").length}
+                  </p>
+                </div>
               </div>
-
-              <div className="p-4 bg-deep-black/20 rounded-lg text-center">
-                <CheckCircle className="h-8 w-8 text-green-400 mx-auto mb-2" />
-                <h4 className="font-medium text-champagne mb-1">Metas</h4>
-                <p className="text-xs text-muted-foreground mb-3">Progresso e lembretes</p>
-                <Button size="sm" className="btn-outline-gold w-full">
-                  Configurar
-                </Button>
+              
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/50">
+                <Target className="h-8 w-8 text-blue-400" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Metas</p>
+                  <p className="text-lg font-semibold">
+                    {notificacoes.filter(n => n.tipo === "meta").length}
+                  </p>
+                </div>
               </div>
-
-              <div className="p-4 bg-deep-black/20 rounded-lg text-center">
-                <Info className="h-8 w-8 text-classic-gold mx-auto mb-2" />
-                <h4 className="font-medium text-champagne mb-1">Investimentos</h4>
-                <p className="text-xs text-muted-foreground mb-3">Updates de portfólio</p>
-                <Button size="sm" className="btn-outline-gold w-full">
-                  Configurar
-                </Button>
+              
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/50">
+                <TrendingUp className="h-8 w-8 text-green-400" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Investimentos</p>
+                  <p className="text-lg font-semibold">
+                    {notificacoes.filter(n => n.tipo === "investimento").length}
+                  </p>
+                </div>
               </div>
-
-              <div className="p-4 bg-deep-black/20 rounded-lg text-center">
-                <Bell className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-                <h4 className="font-medium text-champagne mb-1">Relatórios</h4>
-                <p className="text-xs text-muted-foreground mb-3">Resumos periódicos</p>
-                <Button size="sm" className="btn-outline-gold w-full">
-                  Configurar
-                </Button>
+              
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/50">
+                <Info className="h-8 w-8 text-yellow-400" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Sistema</p>
+                  <p className="text-lg font-semibold">
+                    {notificacoes.filter(n => n.tipo === "sistema").length}
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>
