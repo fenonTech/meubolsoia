@@ -67,7 +67,7 @@ export default {
         "elegant-bronze": "hsl(var(--elegant-bronze))",
       },
       fontFamily: {
-        inter: ["Inter", "system-ui", "sans-serif"],
+        poppins: ["Poppins", "system-ui", "sans-serif"],
         playfair: ["Playfair Display", "serif"],
       },
       borderRadius: {
